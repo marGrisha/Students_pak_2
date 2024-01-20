@@ -115,3 +115,83 @@ public:
     {
         return Students;
     }
+    void conductSubject()
+    {
+        std::cout << "препода: ";
+        for (Tutor *tutor : tutors)
+        {
+            std::cout << tutor->getName() << " ";
+        }
+        std::cout << "провели занятие студентам: ";
+        for (Student *Student : Students)
+        {
+            std::cout << Student->getName() << " ";
+        }
+        std::cout << std::endl
+                  << "Результаты пары " << this->getName() << ":" << std::endl;
+        std::cout << "-------------" << std::endl;
+        for (Tutor *tutor : tutors)
+        {
+            for (Student *Student : Students)
+            {
+                if (rand() % 2 == 0)
+                {
+                    if (tutor->getMood())
+                    {
+                        // В хорошем настроении
+                        int numMarks = rand() % 5 + 1;
+                        for (int i = 0; i < numMarks; ++i)
+                        {
+                            tutor->addMarkRandomly(*Student);
+                        }
+                    }
+                    else
+                    {
+                        // В плохом настроении
+                        int numMarks = rand() % 3 + 1;
+                        for (int i = 0; i < numMarks; ++i)
+                        {
+                            tutor->addMarkRandomly(*Student);
+                        }
+                    }
+                }
+            }
+        }
+        std::cout << "-------------" << std::endl;
+    }
+
+private:
+    std::string name;
+    std::vector<Tutor *> tutors;
+    std::vector<Student *> Students;
+};
+
+class Parent
+{
+public:
+    Parent(std::string name) : name(name) {}
+
+    const std::string &getName() const
+    {
+        return name;
+    }
+
+    void addChild(Student &Student)
+    {
+        children.push_back(&Student);
+    }
+
+    bool hasChild(const Student &Student) const
+    {
+        return std::find(children.begin(), children.end(), &Student) != children.end();
+    }
+
+    void tellAboutAllChildren() const
+    {
+        std::cout << "Рассказ о всех студентах:" << std::endl;
+        for (const Student *Student : children)
+        {
+            tellAboutChild(Student);
+        }
+        std::cout << std::endl;
+    }
