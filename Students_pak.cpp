@@ -258,3 +258,35 @@ protected:
 
         return sum / children.size();
     }
+
+private:
+    std::string name;
+    bool goodMood = (rand() % 2 == 0);
+    std::vector<const Student *> children;
+};
+
+class GrandParent : public Parent
+{
+public:
+    GrandParent(std::string name) : Parent(name) {}
+    void tellAboutChild(const Student *Student) const override
+    {
+        if (hasChild(*Student))
+        {
+            std::cout << "Бабушка " << getName() << " рассказывает о своем внуке " << Student->getName() << ": ";
+            std::cout << "Всегда был хорошим, красивым, но лентяем." << std::endl;
+        }
+        else
+        {
+            // Бабушка рассказывает
+            std::cout << "Бабушка " << getName() << " рассказывает о чужом ребенке " << Student->getName() << ": ";
+            if (goodMood)
+            {
+                std::cout << (Student->isExcellentStudent() ? "Отличник" : "Не отличник") << std::endl;
+            }
+            else
+            {
+                std::cout << "У все норм." << std::endl;
+            }
+        }
+    }
