@@ -358,3 +358,74 @@ public:
     {
         subjects.push_back(subject);
     }
+
+private:
+    Parent *findParentOfStudent(const Student &Student)
+    {
+        for (Parent *Parent : Parents)
+        {
+            if (Parent->hasChild(Student))
+            {
+                return Parent;
+            }
+        }
+        return nullptr;
+    }
+
+    std::string name;
+    std::vector<Tutor *> tutors;
+    std::vector<Parent *> Parents;
+    std::vector<Subject> subjects;
+    std::vector<const Student *> childrenWithoutParents;
+};
+
+int main()
+{
+    std::srand(std::time(0));
+    setlocale(LC_ALL, "Russian");
+
+    Tutor tutor1("Волобуев");
+    RandomlyTutor tutor2("Марицкий");
+    GrandParent Parent1("Зина");
+    Parent Parent2("Иван");
+    Student Student1("Сухоруков");
+    Student Student2("Киселев");
+    Student Student3("Сидоров");
+
+    Parent1.addChild(Student1);
+    Parent2.addChild(Student2);
+
+    Subject subject1("Математический анализ");
+    subject1.addTutor(tutor1);
+    subject1.addTutor(tutor2);
+    subject1.addStudent(Student1);
+    subject1.addStudent(Student2);
+    subject1.conductSubject();
+
+    Subject subject2("Математическая логика");
+    subject2.addTutor(tutor2);
+    subject2.addStudent(Student3);
+    subject2.conductSubject();
+
+    Parent1.tellAboutAllChildren();
+    Parent2.tellAboutOneRandomChild();
+
+    tutor1.addMark(Student1, 4);
+    tutor1.addMark(Student2, 5);
+    tutor1.addMark(Student3, 3);
+
+    Parent1.tellAboutSpecificChild(&Student1);
+    Parent2.tellAboutAverageChildren();
+
+    Council council("Университетское собрание");
+    council.addParticipant(tutor1);
+    council.addParticipant(tutor2);
+    council.addParticipant(Parent1);
+    council.addParticipant(Parent2);
+    council.addSubject(subject1);
+    council.addSubject(subject2);
+
+    council.discussSubjects();
+
+    return 0;
+}
