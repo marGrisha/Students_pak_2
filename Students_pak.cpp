@@ -290,3 +290,71 @@ public:
             }
         }
     }
+
+private:
+    std::string name;
+    bool goodMood = (rand() % 2 == 0);
+    std::vector<const Student *> children;
+};
+
+class Council
+{
+public:
+    Council(const std::string &name) : name(name) {}
+
+    void addParticipant(Tutor &tutor)
+    {
+        tutors.push_back(&tutor);
+    }
+
+    void addParticipant(Parent &Parent)
+    {
+        Parents.push_back(&Parent);
+    }
+
+    void discussSubjects()
+    {
+        std::cout << "Начало обсуждения на собрании: " << name << std::endl;
+
+        for (Subject &subject : subjects)
+        {
+            std::cout << "Обсуждение предмета: " << subject.getName() << std::endl;
+
+            for (Tutor *tutor : tutors)
+            {
+                if (subject.hasTutor(*tutor))
+                {
+                    for (Student *Student : subject.getStudents())
+                    {
+                        Parent *Parent = findParentOfStudent(*Student);
+                        if (Parent)
+                        {
+                            Parent->tellAboutSpecificChild(Student);
+                        }
+                        else
+                        {
+
+                            childrenWithoutParents.push_back(Student);
+                        }
+                    }
+                }
+            }
+        }
+
+        // огласка списка студентов, чьи опекуны отсутствуют на собрании
+        if (!childrenWithoutParents.empty())
+        {
+            std::cout << "Дети, чьи родители/опекуны отсутствуют на собрании:" << std::endl;
+            for (const Student *Student : childrenWithoutParents)
+            {
+                std::cout << Student->getName() << std::endl;
+            }
+        }
+
+        std::cout << "Завершение собрания: " << name << std::endl;
+    }
+
+    void addSubject(const Subject &subject)
+    {
+        subjects.push_back(subject);
+    }
