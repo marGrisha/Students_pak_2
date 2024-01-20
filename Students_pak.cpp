@@ -78,3 +78,40 @@ public:
                       << (goodMood ? "Хорошее" : "Плохое") << std::endl;
         }
     }
+    void addMarkRandomly(Student &Student) override
+    {
+        addMark(Student);
+    }
+
+private:
+    int randomNumberMood = rand() % 3 + 3;
+};
+
+class Subject
+{
+public:
+    Subject(std::string name) : name(name) {}
+
+    const std::string &getName() const
+    {
+        return name;
+    }
+    void addTutor(Tutor &tutor)
+    {
+        tutors.push_back(&tutor);
+    }
+
+    void addStudent(Student &Student)
+    {
+        Students.push_back(&Student);
+    }
+
+    bool hasTutor(const Tutor &tutor) const
+    {
+        return std::find(tutors.begin(), tutors.end(), &tutor) != tutors.end();
+    }
+
+    const std::vector<Student *> &getStudents() const
+    {
+        return Students;
+    }
