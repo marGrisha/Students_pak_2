@@ -195,3 +195,66 @@ public:
         }
         std::cout << std::endl;
     }
+    void tellAboutOneRandomChild() const
+    {
+        if (children.empty())
+        {
+            std::cout << "Нет студентов для рассказа." << std::endl;
+            return;
+        }
+
+        int randomIndex = rand() % children.size();
+        tellAboutChild(children[randomIndex]);
+        std::cout << std::endl;
+    }
+
+    void tellAboutAverageChildren() const
+    {
+        if (children.empty())
+        {
+            std::cout << "Нет студентов для рассказа." << std::endl;
+            return;
+        }
+
+        double averageMark = calculateAverageMark();
+        std::cout << "Рассказ о средней успеваемости студентов: " << (averageMark >= 4.5 ? "Хорошая" : "Плохая") << std::endl;
+        std::cout << std::endl;
+    }
+
+    void tellAboutSpecificChild(const Student *Student) const
+    {
+        auto it = std::find(children.begin(), children.end(), Student);
+        if (it != children.end())
+        {
+            tellAboutChild(*it);
+        }
+        else
+        {
+            std::cout << "Ошибка: Этот студент не является ребенком родителя/опекуна." << std::endl;
+        }
+    }
+
+protected:
+    virtual void tellAboutChild(const Student *Student) const
+    {
+        std::cout << "Опекун/родитель " << name << " рассказывает о своем ребенке " << Student->getName() << ": ";
+        if (goodMood)
+        {
+            std::cout << (Student->isExcellentStudent() ? "Отличник" : "Не отличник") << std::endl;
+        }
+        else
+        {
+            std::cout << "У всегда все хорошо." << std::endl;
+        }
+    }
+
+    double calculateAverageMark() const
+    {
+        double sum = 0.0;
+        for (const Student *Student : children)
+        {
+            sum += (Student->isExcellentStudent() ? 5.0 : 3.0);
+        }
+
+        return sum / children.size();
+    }
